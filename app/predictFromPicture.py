@@ -5,11 +5,27 @@ from efficientnet_pytorch import EfficientNet
 import pandas as pd
 from pathlib import Path
 
+class_file_path = 'app/static/class_names.txt'
+
+
+def save_class_names(train_path, output_path):
+        target = []
+        for p in Path(train_path).glob('*'):
+            if p.stem == 'NidoranF':
+                target.append(p.stem[:-1])
+            else:
+                target.append(p.stem)
+
+        with open(output_path, 'w') as f:
+            for class_name in target:
+                f.write(class_name + '\n')
+
+
 class PokemonClassifier:
     def __init__(self, model_path, train_path, csv_path):
 
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        self.class_names = self.encode_target(train_path)
+        self.class_names = self.load_class_names(class_file_path)
         self.model = EfficientNet.from_pretrained("efficientnet-b2")
         self.model._fc = torch.nn.Linear(1408, len(self.class_names))
         self.model.load_state_dict(torch.load(model_path, map_location=self.device, weights_only=True))
@@ -18,15 +34,10 @@ class PokemonClassifier:
         
         self.pokemon_data = pd.read_csv(csv_path)
 
-    def encode_target(self, train_path):
-
-        target = []
-        for p in Path(train_path).glob('*'):
-            if p.stem == 'NidoranF':
-                target.append(p.stem[:-1])
-            else:
-                target.append(p.stem)
-        return target
+    @staticmethod
+    def load_class_names(class_file_path):
+        with open(class_file_path, 'r') as f:
+            return [line.strip() for line in f.readlines()]
 
     def get_pokedex_number(self, pokemon_name):
 
@@ -34,7 +45,7 @@ class PokemonClassifier:
         if not pokemon_info.empty:
             return pokemon_info.iloc[0]['Number']
         else:
-            return None  # Pokémon not found
+            return None  
 
     def predict(self, image_path):
 
@@ -46,7 +57,7 @@ class PokemonClassifier:
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
         ])
 
-        img_tensor = transform(img).unsqueeze(0).to(self.device)  # Add batch dimension
+        img_tensor = transform(img).unsqueeze(0).to(self.device)  
 
         with torch.no_grad():
             output = self.model(img_tensor)
