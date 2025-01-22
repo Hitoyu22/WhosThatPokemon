@@ -3,19 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Choisis un pokemon</title>
+    <title>Quel est ce pokémon ?</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/x-icon" href="https://github.com/PokeAPI/sprites/blob/master/sprites/items/poke-ball.png?raw=true">
 </head>
-<body>
-    <h1>Choisis un pokémon</h1>
-    <form action="{{ url_for('upload_image') }}" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" accept="image/*">
-        <button type="submit">Déterminer</button>
-    </form>
+<body class="font-sans text-gray-900" style="background-image: url('static/images/wallpaper.png'); background-size: cover; background-repeat: no-repeat;">
+    <!-- Navbar -->
+    <nav class="fixed w-full top-0 left-0 z-10 bg-black-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo Section -->
+                <div class="flex-shrink-0">
+                    <a href="/">
+                    <img src="static/images/logoNavbar.png" alt="Logo" class="h-8 w-auto">
+                    </a>
+                </div>
 
-    {% if pokemon %}
-        <h2>Pokémon prédit: {{ pokemon }}</h2>
-        <h3>Numéro du Pokémon: {{ number }}</h3>
-        <img src="{{ url_for('static', filename='uploads/' + image_url.split('/')[-1]) }}" alt="Uploaded Image" width="300">
-    {% endif %}
+                <!-- Links Section -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="/" class="text-white px-3 py-2 rounded-md text-sm font-medium hover:underline">Prédiction</a>
+                        <a href="#" class="text-white px-3 py-2 rounded-md text-sm font-medium hover:underline">Combats</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex h-screen pt-16 items-center justify-center">
+        <div class="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+            <h1 class="text-2xl font-semibold text-center text-black mb-6">Prédiction Pokémon</h1>
+            <p class="text-center my-2">Importez une image d'un pokémon de la première génération et choisissez le modèle que vous souhaitez utiliser.</p>
+
+            <form action="{{ url_for('upload_image') }}" method="post" enctype="multipart/form-data">
+                <!-- File Upload -->
+                <div class="flex items-center justify-center w-full mb-6" id="upload-section">
+                    <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100" id="dropzone">
+                        <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                            <img src="https://github.com/PokeAPI/sprites/blob/master/sprites/items/poke-ball.png?raw=true" alt="Pokeball" class="h-12 w-12 mb-2">
+                            <p class="mb-2 text-sm text-gray-500"><span class="font-semibold">Cliquez pour ajouter</span> ou faites glissez une image</p>
+                            <p class="text-xs text-gray-500">PNG, JPG et JPEG autorisé</p>
+                        </div>
+                        <input id="dropzone-file" name="file" type="file" accept="image/*" class="hidden" required/>
+                    </label>
+                </div>
+            
+                <!-- File Name -->
+                <div class="mb-6 hidden" id="file-name-section">
+                    <p class="text-sm text-gray-700">Fichier sélectionné : <span id="file-name" class="font-semibold"></span></p>
+                </div>
+            
+                <!-- Model Select -->
+                <div class="mb-6">
+                    <label for="model-select" class="block mb-2 text-sm font-medium text-gray-900">Modèle :</label>
+                    <select id="model-select" name="model" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
+                        {% for model_file, display_name in model_files %}
+                            <option value="{{ model_file }}">{{ display_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button id="submit-button" type="submit" class="bg-red-500 hover:bg-red-400 text-white font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-red-300">Déterminer</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        const dropzone = document.getElementById('dropzone');
+        const fileInput = document.getElementById('dropzone-file');
+        const fileNameSection = document.getElementById('file-name-section');
+        const fileNameSpan = document.getElementById('file-name');
+    
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.classList.add('bg-gray-200');
+        });
+    
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.classList.remove('bg-gray-200');
+        });
+    
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.classList.remove('bg-gray-200');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                fileInput.files = files;
+                fileNameSection.classList.remove('hidden');
+                fileNameSpan.textContent = files[0].name;
+            }
+        });
+    
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length > 0) {
+                fileNameSection.classList.remove('hidden');
+                fileNameSpan.textContent = fileInput.files[0].name;
+            }
+        });
+    </script>
 </body>
 </html>

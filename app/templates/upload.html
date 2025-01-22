@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Détails de {{pokemonData['Name']}}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>    <style>
+        :root {
+            --type1-color: #A8A77A; 
+            --type2-color: #A8A77A; 
+        }
+
+        body {
+            background: linear-gradient(to top, var(--type1-color), var(--type2-color)) !important;
+        }
+
+        #map { height: 700px; width: 1000px; margin-top: 20px; }
+    </style>
+    <link rel="icon" type="image/x-icon" href="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ number }}.png">
+</head>
+<body class="font-sans bg-gradient-to-t min-h-screen">
+
+    <nav class="fixed w-full top-0 left-0 z-10 bg-black-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo Section -->
+                <div class="flex-shrink-0">
+                    <a href="/">
+                    <img src="static/images/logoNavbar.png" alt="Logo" class="h-8 w-auto">
+                    </a>
+                </div>
+
+                <!-- Links Section -->
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4">
+                        <a href="/" class="text-white px-3 py-2 rounded-md text-sm font-medium hover:underline">Prédiction</a>
+                        <a href="#" class="text-white px-3 py-2 rounded-md text-sm font-medium hover:underline">Combats</a>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="flex h-screen items-center justify-center px-6">
+        <div class="flex justify-center items-center w-1/2 h-full">
+            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ number }}.png" alt="{{ pokemonData['Name'] }}" class="h-64 w-64 object-contain">
+        </div>
+
+        <div class="w-1/2 h-full text-white px-8 flex flex-col justify-center">
+            <div class="text-6xl font-bold mb-4">#{{ number }}</div>
+            <div class="text-8xl font-extrabold mb-6">{{ pokemonData['Name'] }}</div>
+            <div class="text-2xl leading-relaxed">{{ pokemonData['Description'] }}</div>
+            <div id="types-images" class="flex">
+            </div>
+        </div>
+    </div>
+
+    <div class="flex justify-center my-8">
+        <div>
+            <h2 class="text-4xl font-bold text-white mb-4 text-center">Localisation de {{pokemonData["Name"]}} en France sur Pokemon Go</h2>
+            <div id="map"></div>
+        </div>
+    </div>
+
+    <script>
+        const typeColors = {
+            "normal": "#A8A77A",
+            "fire": "#EE8130",
+            "water": "#6390F0",
+            "electric": "#F7D02C",
+            "grass": "#7AC74C",
+            "ice": "#96D9D6",
+            "fighting": "#C22E28",
+            "poison": "#A33EA1",
+            "ground": "#E2BF65",
+            "flying": "#A98FF3",
+            "psychic": "#F95587",
+            "bug": "#A6B91A",
+            "rock": "#B6A136",
+            "ghost": "#735797",
+            "dragon": "#6F35FC",
+            "dark": "#705746",
+            "steel": "#B7B7CE",
+            "fairy": "#D685AD"
+        };
+
+        // Récupérer les données du Pokémon de Flask
+        const pokemonData = {
+            Type: "{{ pokemonData['Type'] }}", // Récupéré depuis Flask
+            Name: "{{ pokemonData['Name'] }}", // Récupéré depuis Flask
+            Description: "{{ pokemonData['Description'] }}" // Récupéré depuis Flask
+        };
+
+        // Séparer la chaîne de types
+        const types = pokemonData.Type.split(" / ");
+
+        // Fonction pour afficher les images des types
+        const showTypesImages = () => {
+            const typesContainer = document.getElementById('types-images');
+
+            // Boucle pour ajouter une image pour chaque type
+            types.forEach(type => {
+                const typeId = type.toLowerCase();
+                const typeImageUrl = `static/images/types/${getTypeImage(typeId)}.png`;
+
+                const typeImageElement = document.createElement('img');
+                typeImageElement.src = typeImageUrl;
+                typeImageElement.alt = type;
+                typeImageElement.classList.add('type-img');
+                typeImageElement.classList.add('mr-2');
+
+                typesContainer.appendChild(typeImageElement);
+            });
+        };
+
+        // Fonction pour obtenir le nom du fichier image selon le type
+        const getTypeImage = (type) => {
+            const typeMapping = {
+                "normal": "normal",
+                "fire": "fire",
+                "water": "water",
+                "electric": "electric",
+                "grass": "grass",
+                "psychic": "psychic",
+                "ice": "ice",
+                "dragon": "dragon",
+                "dark": "dark",
+                "fairy": "fairy",
+                "fighting": "fighting",
+                "flying": "flying",
+                "poison": "poison",
+                "ground": "ground",
+                "rock": "rock",
+                "bug": "bug",
+                "ghost": "ghost",
+                "steel": "steel"
+            };
+
+            return typeMapping[type] || type; // Par défaut, on retourne le type
+        };
+
+        // Afficher les images des types
+        showTypesImages();
+
+        // Récupérer les couleurs des types
+        const type1Color = typeColors[types[0].toLowerCase()];
+        const type2Color = types[1] ? typeColors[types[1].toLowerCase()] : null;
+
+        // Appliquer le dégradé de couleurs
+        document.documentElement.style.setProperty('--type1-color', type1Color);
+        if (type2Color) {
+            document.documentElement.style.setProperty('--type2-color', type2Color);
+        } else {
+            document.documentElement.style.setProperty('--type2-color', type1Color); // Utiliser la même couleur si un seul type
+        }
+
+
+        var coordonneesPokemon = JSON.parse('{{ coordonneesPokemon | tojson | safe }}');
+        var number = '{{ number }}';
+
+        console.log(coordonneesPokemon);
+
+        var map = L.map('map').setView([46.603354, 1.888334], 6);
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: 'Map data © <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // Ajouter les marqueurs sur la carte
+        if (Array.isArray(coordonneesPokemon) && coordonneesPokemon.length > 0) {
+            coordonneesPokemon.forEach(function(point) {
+                if (point.latitude && point.longitude) {
+                    var pokemonImageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${number}.png`;
+
+                    var pokemonIcon = L.icon({
+                        iconUrl: pokemonImageUrl,
+                        iconSize: [80, 80], 
+                        iconAnchor: [16, 32], 
+                        popupAnchor: [0, -32] 
+                    });
+
+                    L.marker([point.latitude, point.longitude], { icon: pokemonIcon })
+                        .addTo(map)
+                        .bindPopup('Pokémon n° ' + number);
+                } else {
+                    console.error('Coordonnée invalide ou manque de numéro Pokémon :', point);
+                }
+            });
+        } else {
+            console.error('coordonneesPokemon n\'est pas un tableau valide ou est vide');
+        }
+    </script>
+
+</body>
+</html>

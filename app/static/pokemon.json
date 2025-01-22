@@ -1,0 +1,12 @@
+{
+    "Number": 1,
+    "Name": "Bulbizarre",
+    "Type": "grass / poison",
+    "Height": "0.7 m",
+    "Weight": "6.9 kg",
+    "Sub_Evolution": "None",
+    "Sub_Evolution_ID": null,
+    "Evolution": "Herbizarre",
+    "Evolution_ID": 2,
+    "Description": "Dès sa naissance, ce Pokémon porte une graine de plante sur son dos. La graine grandit lentement."
+}
