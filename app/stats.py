@@ -12,13 +12,20 @@ class Pokemon:
         self.type2 = data_row['Type2'] if pd.notna(data_row['Type2']) else None
         self.height = data_row['Height(m)']
         self.weight = data_row['Weight(kg)']
+        self.hp = data_row['HP']
         self.sub_evolution = data_row['Sous_Evolution'] if pd.notna(data_row['Sous_Evolution']) else None
         self.evolution = data_row['Evolution'] if pd.notna(data_row['Evolution']) else None
+        self.legendary = self.legendary_bool(data_row['Legendaire'])
         self.description = data_row['description'] if pd.notna(data_row['description']) else None
 
         # Trouver les IDs des sous-évolutions et des évolutions
         self.sub_evolution_id = self.get_pokemon_id_by_name(self.sub_evolution)
         self.evolution_id = self.get_pokemon_id_by_name(self.evolution)
+        self.sub_evolution_2 = self.get_sub_evolution(self.sub_evolution) if self.sub_evolution else None
+        self.sub_evolution_2_id = self.get_pokemon_id_by_name(self.sub_evolution_2) if self.sub_evolution_2 else None
+        self.evolution_2 = self.get_evolution(self.evolution) if self.evolution else None
+        self.evolution_2_id = self.get_pokemon_id_by_name(self.evolution_2) if self.evolution_2 else None
+        self.step = self.step_evolution(self.sub_evolution, self.sub_evolution_2, self.legendary)
 
         # Statistiques pour les graphiques
         self.radar_stats = {
@@ -47,6 +54,37 @@ class Pokemon:
             if not row.empty:
                 return int(row['Number'].iloc[0])
         return None
+    
+    def get_sub_evolution(self, name):
+        row = self.dataset[self.dataset['Nom'] == name]
+        if not row.empty:
+            sub_evolution_2 = row['Sous_Evolution'].iloc[0]
+            if sub_evolution_2 is not None:
+                return sub_evolution_2
+        
+    def get_evolution(self, name):
+        row = self.dataset[self.dataset['Nom'] == name]
+        if not row.empty:
+            evolution_2 = row['Evolution'].iloc[0]
+            if evolution_2 is not None:
+                return evolution_2
+    
+    def legendary_bool(self, val):
+        if val == 1.0:
+            return True
+        else:
+            return False
+        
+    def step_evolution(self, sub_evolution, sub_evolution_2, legendary):
+        if sub_evolution is not None:
+            step = 2
+            if sub_evolution_2 is not None:
+                step = 3
+        elif legendary:
+            step = 4
+        else:
+            step = 1
+        return step
 
     def to_json(self, output_path="pokemon.json"):
         
@@ -56,10 +94,17 @@ class Pokemon:
             "Type": f"{self.type1}" + (f" / {self.type2}" if self.type2 else ""),
             "Height": f"{self.height} m",
             "Weight": f"{self.weight} kg",
+            "hp": self.hp,
+            "Sub_Evolution_2": self.sub_evolution_2 if self.sub_evolution_2 else "None",
+            "Sub_Evolution_2_ID": self.sub_evolution_2_id,
             "Sub_Evolution": self.sub_evolution if self.sub_evolution else "None",
             "Sub_Evolution_ID": self.sub_evolution_id,
             "Evolution": self.evolution if self.evolution else "None",
             "Evolution_ID": self.evolution_id,
+            "Evolution_2": self.evolution_2 if self.evolution_2 else "None",
+            "Evolution_2_ID": self.evolution_2_id,
+            "Legendaire": self.legendary,
+            "step": self.step,
             "Description": self.description if self.description else "No description available"
         }
         with open(output_path, "w", encoding="utf-8") as f:
