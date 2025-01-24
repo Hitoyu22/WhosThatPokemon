@@ -16,7 +16,6 @@ def save_class_names(train_path, output_path):
                 f.write(class_name + '\n')
 
 
-save_class_names('dataset/images/train/', class_file_path)
 
 def load_class_names(class_file_path):
     with open(class_file_path, 'r') as f:

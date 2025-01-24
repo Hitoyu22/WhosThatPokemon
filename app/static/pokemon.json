@@ -1,12 +1,12 @@
 {
-    "Number": 1,
-    "Name": "Bulbizarre",
-    "Type": "grass / poison",
-    "Height": "0.7 m",
-    "Weight": "6.9 kg",
+    "Number": 21,
+    "Name": "Piafabec",
+    "Type": "normal / flying",
+    "Height": "0.3 m",
+    "Weight": "2.0 kg",
     "Sub_Evolution": "None",
     "Sub_Evolution_ID": null,
-    "Evolution": "Herbizarre",
-    "Evolution_ID": 2,
-    "Description": "Dès sa naissance, ce Pokémon porte une graine de plante sur son dos. La graine grandit lentement."
+    "Evolution": "Rapasdepic",
+    "Evolution_ID": 22,
+    "Description": "Il n'est pas capable de voler haut. Cependant, il peut voler très vite pour protéger son territoire."
 }
