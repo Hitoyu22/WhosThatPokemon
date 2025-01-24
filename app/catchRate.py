@@ -25,6 +25,8 @@ class catchRate:
             self.PokemonImpact = 1
         elif (self.PokemonValue == 4): # Cas du légendaire
             self.PokemonImpact = 0.25
+        else:
+            self.PokemonImpact = 4
         
         #Ball Value
         if (self.BallValue >= 1 & self.BallValue <= 3): #Pokéball =1/ Superball =2/ Hyperball = 3
