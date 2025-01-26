@@ -51,5 +51,7 @@ class catchRate:
         
     def calculCatchRate(self):
         self.ValueToImpact()
-        return math.floor((1 * self.PokemonValue * self.BallValue * self.LevelValue * self.PvValue * self.StatusImpact)*100) / 100
+        value = math.floor((1 * self.PokemonImpact * self.BallImpact * self.LevelImpact * self.PvImpact * self.StatusImpact) * 100) / 100
+        print(value)
+        return value
         #Valeur retournée arrondi a 10^-2 pour un affichage aux petits ognions

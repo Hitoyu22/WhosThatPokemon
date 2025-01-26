@@ -48,13 +48,75 @@
         </div>
 
         <div class="w-1/2 h-full text-white px-8 flex flex-col justify-center">
-            <div class="text-6xl font-bold mb-4">#{{ number }}</div>
-            <div class="text-8xl font-extrabold mb-6">{{ pokemonData['Name'] }}</div>
+            <h2 class="text-6xl font-bold mb-4">#{{ number }}</h2>
+            <h1 class="text-8xl font-extrabold mb-6">{{ pokemonData['Name'] }}</h1>
             <div class="text-2xl leading-relaxed">{{ pokemonData['Description'] }}</div>
+            <p class="text-2xl">Poids : {{ pokemonData['Weight'] }}</p>
+            <p class="text-2xl">Taille : {{ pokemonData['Height'] }}</p>
+            {% if pokemonData['Legendaire'] %}
+                <p class="text-2xl flex items-center">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/refs/heads/master/sprites/items/star-piece.png" class="mr-2" />
+                    Pokémon légendaire
+                </p>
+            {% endif %}
             <div id="types-images" class="flex">
             </div>
         </div>
     </div>
+
+    <div class="flex flex-col items-center my-8">
+        <h2 class="text-4xl font-bold text-white mb-4">Famille évolutive de {{ pokemonData["Name"] }}</h2>
+        <div class="flex space-x-8 justify-center">
+            <!-- Sous-évolution 2 -->
+            {% if pokemonData["Sub_Evolution_2"] != "None" %}
+            <div class="flex flex-col items-center">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ pokemonData['Sub_Evolution_2_ID'] }}.png" 
+                    alt="{{ pokemonData['Sub_Evolution_2'] }}" 
+                    class="h-24 w-24 object-contain mb-2">
+                <p class="text-white text-sm">#{{ pokemonData["Sub_Evolution_2_ID"] }} - {{ pokemonData["Sub_Evolution_2"] }}</p>
+            </div>
+            {% endif %}
+    
+            <!-- Sous-évolution -->
+            {% if pokemonData["Sub_Evolution"] != "None" %}
+            <div class="flex flex-col items-center">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ pokemonData['Sub_Evolution_ID'] }}.png" 
+                    alt="{{ pokemonData['Sub_Evolution'] }}" 
+                    class="h-24 w-24 object-contain mb-2">
+                <p class="text-white text-sm">#{{ pokemonData["Sub_Evolution_ID"] }} - {{ pokemonData["Sub_Evolution"] }}</p>
+            </div>
+            {% endif %}
+    
+            <!-- Pokémon actuel -->
+            <div class="flex flex-col items-center">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ pokemonData['Number'] }}.png" 
+                    alt="{{ pokemonData['Name'] }}" 
+                    class="h-24 w-24 object-contain mb-2">
+                <p class="text-white text-sm">#{{ pokemonData["Number"] }} - {{ pokemonData["Name"] }}</p>
+            </div>
+    
+            <!-- Évolution -->
+            {% if pokemonData["Evolution"] != "None" %}
+            <div class="flex flex-col items-center">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ pokemonData['Evolution_ID'] }}.png" 
+                    alt="{{ pokemonData['Evolution'] }}" 
+                    class="h-24 w-24 object-contain mb-2">
+                <p class="text-white text-sm">#{{ pokemonData["Evolution_ID"] }} - {{ pokemonData["Evolution"] }}</p>
+            </div>
+            {% endif %}
+    
+            <!-- Évolution 2 -->
+            {% if pokemonData["Evolution_2"] != "None" %}
+            <div class="flex flex-col items-center">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ pokemonData['Evolution_2_ID'] }}.png" 
+                    alt="{{ pokemonData['Evolution_2'] }}" 
+                    class="h-24 w-24 object-contain mb-2">
+                <p class="text-white text-sm">#{{ pokemonData["Evolution_2_ID"] }} - {{ pokemonData["Evolution_2"] }}</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    
 
     <div class="flex justify-center my-8">
         <div>
@@ -63,14 +125,22 @@
         </div>
     </div>
 
-    <!-- Section calcul du catch rate via un formulaire -->
-    <!-- Enverra dans dans le JS : -->
-     <div class="mb-4">
+
+    <div>
+        <h2 class="text-2xl font-bold text-white mb-4 text-center">Statistiques de base de {{pokemonData["Name"]}}</h2>
+        <div class="flex space-x-4 justify-center mb-4">
+            <img src="/static/bar_stats.png" alt="Image 1" class="w-64 h-auto">
+            <img src="/static/radar_stats.png" alt="Image 2" class="w-64 h-auto">
+        </div>
+    </div>
+
+
+
+    <div class="mb-4">
     <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center text-white">Calcul du taux de capture</h2>
 
     <form id="catchRateForm" class="max-w-lg mx-auto p-6 bg-gray-50 border border-gray-300 rounded-lg shadow-md">
         
-        <!-- Champ pour le niveau du Pokémon -->
         <div class="mb-6">
             <label for="pokemonLevel" class="block mb-2 text-sm font-medium text-gray-900">Niveau du Pokémon :</label>
             <input 
@@ -85,7 +155,6 @@
                 
         </div>
     
-        <!-- Liste déroulante pour la Pokéball -->
         <div class="mb-6">
             <label for="pokeball" class="block mb-2 text-sm font-medium text-gray-900">Type de Pokéball :</label>
             <select 
@@ -101,7 +170,6 @@
             </select>
         </div>
     
-        <!-- Champ pour la vie restante du Pokémon -->
         <div class="mb-6">
             <label for="pokemonHealth" class="block mb-2 text-sm font-medium text-gray-900">Vie restante du Pokémon :</label>
             <input 
@@ -110,11 +178,9 @@
                 name="pokemonHealth" 
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
                 min="1" 
-                value="100"
                 required>
         </div>
     
-        <!-- Liste déroulante pour le statut du Pokémon -->
         <div class="mb-6">
             <label for="pokemonStatus" class="block mb-2 text-sm font-medium text-gray-900">Statut du Pokémon :</label>
             <select 
@@ -131,7 +197,6 @@
             </select>
         </div>
     
-        <!-- Bouton de soumission -->
         <div class="flex justify-center">
             <button 
                 type="submit" 
@@ -270,46 +335,50 @@
             console.error('coordonneesPokemon n\'est pas un tableau valide ou est vide');
         }
 
+        const pokemonValue = "{{ pokemonData['Legendaire'] }}" === "False" ? "{{ pokemonData['step'] }}" : 4;
+        
         document.getElementById('catchRateForm').addEventListener('submit', function (event) {
-    event.preventDefault(); // Empêche le rechargement de la page
+            event.preventDefault();
 
-    // Récupérer les valeurs des champs
-    const pokemonLevel = document.getElementById('pokemonLevel').value;
-    const pokeball = document.getElementById('pokeball').value;
-    const pokemonHealth = document.getElementById('pokemonHealth').value;
-    const pokemonStatus = document.getElementById('pokemonStatus').value;
+            const pokemonLevel = parseInt(document.getElementById('pokemonLevel').value, 10);
+            const pokeball = document.getElementById('pokeball').value;
+            const pokemonHP = parseInt("{{ pokemonData['hp'] }}", 10) + (pokemonLevel-1) * 2;
+            let pokemonHealth = parseInt(document.getElementById('pokemonHealth').value, 10);
 
-    // Préparer les données à envoyer
-    const formData = {
-        pokemonLevel: pokemonLevel,
-        pokeball: pokeball,
-        pokemonHealth: pokemonHealth,
-        pokemonStatus: pokemonStatus,
-    };
-
-    // Effectuer un appel fetch POST vers le backend
-    fetch('/catch', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json', // Indique qu'on envoie du JSON
-        },
-        body: JSON.stringify(formData), // Convertir les données en chaîne JSON
-    })
-        .then((response) => {
-            if (!response.ok) {
-                throw new Error('Une erreur est survenue avec le serveur');
+            if (pokemonHealth > pokemonHP) {
+                pokemonHealth = pokemonHP; 
             }
-            return response.json(); // Extraire les données JSON de la réponse
-        })
-        .then((data) => {
-            // Afficher la valeur retournée par le backend dans une alerte
-            alert(`Le taux de capture calculé est : ${data.result}`);
-        })
-        .catch((error) => {
-            console.error('Erreur :', error);
-            alert('Une erreur est survenue. Veuillez réessayer.');
+
+            const formData = {
+                pokemonLevel: pokemonLevel,
+                pokeball: pokeball,
+                pokemonHealth: pokemonHealth, 
+                pokemonValue: pokemonValue, 
+                pokemonHP: pokemonHP,
+                pokemonValue: pokemonValue,
+            };
+
+            fetch('/catch', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json', 
+                },
+                body: JSON.stringify(formData),
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error('Une erreur est survenue avec le serveur');
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    alert(`Le taux de capture est estimé à ${data.result} %`);
+                })
+                .catch((error) => {
+                    console.error('Erreur :', error);
+                    alert('Une erreur est survenue. Veuillez réessayer.');
+                });
         });
-});
     </script>
 
 </body>

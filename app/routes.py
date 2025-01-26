@@ -93,18 +93,17 @@ def upload_image():
 @app.route('/catch', methods=['POST'])
 def catch():
     data = request.json  
-    pokemon_level = int(data.get('pokemonLevel', 0))  # Valeur par défaut à 0 si aucune donnée n'est fournie
+    pokemon_level = int(data.get('pokemonLevel', 0))  
     pokeball = int(data.get('pokeball',0)) 
-    pokemon_health = int(data.get('pokemonHealth', 0))  # Conversion en entier
+    pokemon_health = int(data.get('pokemonHealth', 0))
     pokemon_status = int(data.get('pokemonStatus', 1))
+    pokemon_value = int(data.get('pokemonValue', 1))
+    pokemon_hp = int(data.get('pokemonHp', 0))
 
     print(pokemon_level, pokeball, pokemon_health, pokemon_status)
 
-    catch = catchRate(1, pokeball, pokemon_level, pokemon_health, pokemon_status, 100)
+    catch = catchRate(pokemon_value, pokeball, pokemon_level, pokemon_health, pokemon_status, pokemon_hp)
     
-
-
-
     result =  catch.calculCatchRate() 
 
     return jsonify(result=result)

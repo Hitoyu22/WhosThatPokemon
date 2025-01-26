@@ -87,7 +87,6 @@ class Pokemon:
         return step
 
     def to_json(self, output_path="pokemon.json"):
-        
         data = {
             "Number": self.number,
             "Name": self.name,
@@ -95,17 +94,17 @@ class Pokemon:
             "Height": f"{self.height} m",
             "Weight": f"{self.weight} kg",
             "hp": self.hp,
-            "Sub_Evolution_2": self.sub_evolution_2 if self.sub_evolution_2 else "None",
-            "Sub_Evolution_2_ID": self.sub_evolution_2_id,
-            "Sub_Evolution": self.sub_evolution if self.sub_evolution else "None",
-            "Sub_Evolution_ID": self.sub_evolution_id,
-            "Evolution": self.evolution if self.evolution else "None",
-            "Evolution_ID": self.evolution_id,
-            "Evolution_2": self.evolution_2 if self.evolution_2 else "None",
-            "Evolution_2_ID": self.evolution_2_id,
+            "Sub_Evolution_2": self.sub_evolution_2 if pd.notna(self.sub_evolution_2) else "None",
+            "Sub_Evolution_2_ID": self.sub_evolution_2_id if pd.notna(self.sub_evolution_2_id) else None,
+            "Sub_Evolution": self.sub_evolution if pd.notna(self.sub_evolution) else "None",
+            "Sub_Evolution_ID": self.sub_evolution_id if pd.notna(self.sub_evolution_id) else None,
+            "Evolution": self.evolution if pd.notna(self.evolution) else "None",
+            "Evolution_ID": self.evolution_id if pd.notna(self.evolution_id) else None,
+            "Evolution_2": self.evolution_2 if pd.notna(self.evolution_2) else "None",
+            "Evolution_2_ID": self.evolution_2_id if pd.notna(self.evolution_2_id) else None,
             "Legendaire": self.legendary,
             "step": self.step,
-            "Description": self.description if self.description else "No description available"
+            "Description": self.description if pd.notna(self.description) else "No description available"
         }
         with open(output_path, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=4)

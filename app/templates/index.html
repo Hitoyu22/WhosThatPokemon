@@ -8,18 +8,15 @@
     <link rel="icon" type="image/x-icon" href="https://github.com/PokeAPI/sprites/blob/master/sprites/items/poke-ball.png?raw=true">
 </head>
 <body class="font-sans text-gray-900" style="background-image: url('static/images/wallpaper.png'); background-size: cover; background-repeat: no-repeat;">
-    <!-- Navbar -->
     <nav class="fixed w-full top-0 left-0 z-10 bg-black-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
-                <!-- Logo Section -->
                 <div class="flex-shrink-0">
                     <a href="/">
                     <img src="static/images/logoNavbar.png" alt="Logo" class="h-8 w-auto">
                     </a>
                 </div>
 
-                <!-- Links Section -->
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
                         <a href="/" class="text-white px-3 py-2 rounded-md text-sm font-medium hover:underline">Prédiction</a>
@@ -35,7 +32,6 @@
             <p class="text-center my-2">Importez une image d'un pokémon de la première génération et choisissez le modèle que vous souhaitez utiliser.</p>
 
             <form action="{{ url_for('upload_image') }}" method="post" enctype="multipart/form-data">
-                <!-- File Upload -->
                 <div class="flex items-center justify-center w-full mb-6" id="upload-section">
                     <label for="dropzone-file" class="flex flex-col items-center justify-center w-full h-64 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100" id="dropzone">
                         <div class="flex flex-col items-center justify-center pt-5 pb-6">
@@ -47,12 +43,14 @@
                     </label>
                 </div>
             
-                <!-- File Name -->
+                <div class="flex justify-center mb-6 hidden" id="image-preview-section">
+                    <img id="image-preview" class="max-w-full h-64 object-contain" />
+                </div>
+
                 <div class="mb-6 hidden" id="file-name-section">
                     <p class="text-sm text-gray-700">Fichier sélectionné : <span id="file-name" class="font-semibold"></span></p>
                 </div>
             
-                <!-- Model Select -->
                 <div class="mb-6">
                     <label for="model-select" class="block mb-2 text-sm font-medium text-gray-900">Modèle :</label>
                     <select id="model-select" name="model" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required>
@@ -62,18 +60,20 @@
                     </select>
                 </div>
             
-                <!-- Submit Button -->
                 <div class="text-center">
                     <button id="submit-button" type="submit" class="bg-red-500 hover:bg-red-400 text-white font-semibold py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-red-300">Déterminer</button>
                 </div>
             </form>
         </div>
     </div>
+
     <script>
         const dropzone = document.getElementById('dropzone');
         const fileInput = document.getElementById('dropzone-file');
         const fileNameSection = document.getElementById('file-name-section');
         const fileNameSpan = document.getElementById('file-name');
+        const imagePreviewSection = document.getElementById('image-preview-section');
+        const imagePreview = document.getElementById('image-preview');
     
         dropzone.addEventListener('dragover', (e) => {
             e.preventDefault();
@@ -92,6 +92,15 @@
                 fileInput.files = files;
                 fileNameSection.classList.remove('hidden');
                 fileNameSpan.textContent = files[0].name;
+
+                imagePreviewSection.classList.remove('hidden');
+                const file = files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+                dropzone.classList.add('hidden');
             }
         });
     
@@ -99,6 +108,15 @@
             if (fileInput.files.length > 0) {
                 fileNameSection.classList.remove('hidden');
                 fileNameSpan.textContent = fileInput.files[0].name;
+
+                imagePreviewSection.classList.remove('hidden');
+                const file = fileInput.files[0];
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    imagePreview.src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+                dropzone.classList.add('hidden');
             }
         });
     </script>
