@@ -4,10 +4,9 @@ from PIL import Image
 from efficientnet_pytorch import EfficientNet
 import pandas as pd
 from pathlib import Path
-from scripts.saveClassNames import class_file_path
 from scripts.saveClassNames import load_class_names
 
-
+class_file_path = './dataset/class_names.txt'
 
 class PokemonClassifier:
     def __init__(self, model_path, csv_path):

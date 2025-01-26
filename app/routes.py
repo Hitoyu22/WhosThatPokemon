@@ -1,11 +1,15 @@
 import os
-from flask import render_template, request, redirect, url_for
+from flask import jsonify, render_template, request, redirect, url_for
 from werkzeug.utils import secure_filename
 from app import app
 from app.predictFromPicture import PokemonClassifier
 from app.stats import Pokemon
 from app.geography import PokemonMap
 import pandas as pd
+from app.catchRate import catchRate
+
+
+
 UPLOAD_FOLDER = 'app/static/uploads/'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -84,3 +88,23 @@ def upload_image():
         )
 
     return redirect(url_for('index'))
+
+
+@app.route('/catch', methods=['POST'])
+def catch():
+    data = request.json  
+    pokemon_level = int(data.get('pokemonLevel', 0))  # Valeur par défaut à 0 si aucune donnée n'est fournie
+    pokeball = int(data.get('pokeball',0)) 
+    pokemon_health = int(data.get('pokemonHealth', 0))  # Conversion en entier
+    pokemon_status = int(data.get('pokemonStatus', 1))
+
+    print(pokemon_level, pokeball, pokemon_health, pokemon_status)
+
+    catch = catchRate(1, pokeball, pokemon_level, pokemon_health, pokemon_status, 100)
+    
+
+
+
+    result =  catch.calculCatchRate() 
+
+    return jsonify(result=result)

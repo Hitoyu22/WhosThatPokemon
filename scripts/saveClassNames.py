@@ -15,8 +15,6 @@ def save_class_names(train_path, output_path):
             for class_name in target:
                 f.write(class_name + '\n')
 
-
-
 def load_class_names(class_file_path):
     with open(class_file_path, 'r') as f:
         return [line.strip() for line in f.readlines()]

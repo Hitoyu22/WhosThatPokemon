@@ -36,8 +36,6 @@
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-4">
                         <a href="/" class="text-white px-3 py-2 rounded-md text-sm font-medium hover:underline">Prédiction</a>
-                        <a href="#" class="text-white px-3 py-2 rounded-md text-sm font-medium hover:underline">Combats</a>
-
                     </div>
                 </div>
             </div>
@@ -63,6 +61,85 @@
             <h2 class="text-4xl font-bold text-white mb-4 text-center">Localisation de {{pokemonData["Name"]}} en France sur Pokemon Go</h2>
             <div id="map"></div>
         </div>
+    </div>
+
+    <!-- Section calcul du catch rate via un formulaire -->
+    <!-- Enverra dans dans le JS : -->
+     <div class="mb-4">
+    <h2 class="text-2xl font-bold mb-6 text-gray-800 text-center text-white">Calcul du taux de capture</h2>
+
+    <form id="catchRateForm" class="max-w-lg mx-auto p-6 bg-gray-50 border border-gray-300 rounded-lg shadow-md">
+        
+        <!-- Champ pour le niveau du Pokémon -->
+        <div class="mb-6">
+            <label for="pokemonLevel" class="block mb-2 text-sm font-medium text-gray-900">Niveau du Pokémon :</label>
+            <input 
+                type="number" 
+                id="pokemonLevel" 
+                name="pokemonLevel" 
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                min="1" 
+                max="100"
+                value="25" 
+                required>
+                
+        </div>
+    
+        <!-- Liste déroulante pour la Pokéball -->
+        <div class="mb-6">
+            <label for="pokeball" class="block mb-2 text-sm font-medium text-gray-900">Type de Pokéball :</label>
+            <select 
+                id="pokeball" 
+                name="pokeball" 
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                required>
+                <option value="1">Pokéball</option>
+                <option value="2">Super Ball</option>
+                <option value="3">Hyper Ball</option>
+                <option value="4">Ultra Ball</option>
+                <option value="5">Master Ball</option>
+            </select>
+        </div>
+    
+        <!-- Champ pour la vie restante du Pokémon -->
+        <div class="mb-6">
+            <label for="pokemonHealth" class="block mb-2 text-sm font-medium text-gray-900">Vie restante du Pokémon :</label>
+            <input 
+                type="number" 
+                id="pokemonHealth" 
+                name="pokemonHealth" 
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                min="1" 
+                value="100"
+                required>
+        </div>
+    
+        <!-- Liste déroulante pour le statut du Pokémon -->
+        <div class="mb-6">
+            <label for="pokemonStatus" class="block mb-2 text-sm font-medium text-gray-900">Statut du Pokémon :</label>
+            <select 
+                id="pokemonStatus" 
+                name="pokemonStatus" 
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" 
+                required>
+                <option value="0">Aucun</option>
+                <option value="1">Paralysie</option>
+                <option value="2">Brulure</option>
+                <option value="3">Poison</option>
+                <option value="4">Sommeil</option>
+                <option value="5">Gel</option>
+            </select>
+        </div>
+    
+        <!-- Bouton de soumission -->
+        <div class="flex justify-center">
+            <button 
+                type="submit" 
+                class="w-full px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg shadow-md hover:bg-blue-600 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2">
+                Calculer
+            </button>
+        </div>
+    </form>
     </div>
 
     <script>
@@ -192,6 +269,47 @@
         } else {
             console.error('coordonneesPokemon n\'est pas un tableau valide ou est vide');
         }
+
+        document.getElementById('catchRateForm').addEventListener('submit', function (event) {
+    event.preventDefault(); // Empêche le rechargement de la page
+
+    // Récupérer les valeurs des champs
+    const pokemonLevel = document.getElementById('pokemonLevel').value;
+    const pokeball = document.getElementById('pokeball').value;
+    const pokemonHealth = document.getElementById('pokemonHealth').value;
+    const pokemonStatus = document.getElementById('pokemonStatus').value;
+
+    // Préparer les données à envoyer
+    const formData = {
+        pokemonLevel: pokemonLevel,
+        pokeball: pokeball,
+        pokemonHealth: pokemonHealth,
+        pokemonStatus: pokemonStatus,
+    };
+
+    // Effectuer un appel fetch POST vers le backend
+    fetch('/catch', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json', // Indique qu'on envoie du JSON
+        },
+        body: JSON.stringify(formData), // Convertir les données en chaîne JSON
+    })
+        .then((response) => {
+            if (!response.ok) {
+                throw new Error('Une erreur est survenue avec le serveur');
+            }
+            return response.json(); // Extraire les données JSON de la réponse
+        })
+        .then((data) => {
+            // Afficher la valeur retournée par le backend dans une alerte
+            alert(`Le taux de capture calculé est : ${data.result}`);
+        })
+        .catch((error) => {
+            console.error('Erreur :', error);
+            alert('Une erreur est survenue. Veuillez réessayer.');
+        });
+});
     </script>
 
 </body>

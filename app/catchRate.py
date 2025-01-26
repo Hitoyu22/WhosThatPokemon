@@ -25,11 +25,9 @@ class catchRate:
             self.PokemonImpact = 1
         elif (self.PokemonValue == 4): # Cas du légendaire
             self.PokemonImpact = 0.25
-        else:
-            self.PokemonImpact = 4
         
         #Ball Value
-        if (self.BallValue >= 1 & self.BallValue <= 3): #Pokéball =1/ Superball =2/ Hyperball = 3
+        if 1 <= self.BallValue <= 3: #Pokéball =1/ Superball =2/ Hyperball = 3
             self.BallImpact = self.BallValue
         elif (self.BallValue == 4): # Ultraball = 5
             self.BallImpact = 5
@@ -44,7 +42,7 @@ class catchRate:
 
         #Status Value
         if (self.StatusValue == 0): # Aucun status
-            self.StatusImpact =0
+            self.StatusImpact = 1
         elif (self.StatusValue >= 1 & self.StatusValue <= 3): # Status Paralysie Brulure ou poison
             self.StatusImpact = 1.5
         elif (self.StatusValue == 4 or self.StatusValue == 5): # Status Sommeil ou Gel
@@ -53,5 +51,5 @@ class catchRate:
         
     def calculCatchRate(self):
         self.ValueToImpact()
-        return math.floor((1 * self.PokemonValue * self.BallValue * self.LevelValue * self.PvValue * self.StatusValue)*100) / 100
+        return math.floor((1 * self.PokemonValue * self.BallValue * self.LevelValue * self.PvValue * self.StatusImpact)*100) / 100
         #Valeur retournée arrondi a 10^-2 pour un affichage aux petits ognions
