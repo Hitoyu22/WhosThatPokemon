@@ -4,7 +4,7 @@ from torchvision.transforms import transforms
 from torch.utils.data import Dataset, DataLoader
 from torch import nn, optim
 from efficientnet_pytorch import EfficientNet
-from saveClassNames import load_class_names
+from saveClassNames import ClassNameGestion
 from datetime import datetime
 from rapportTrainPicture import RapportPDF
 
@@ -19,6 +19,8 @@ chemin_test = './dataset/images/test/'
 
 chemin_fichier_classes = './dataset/class_names.txt'
 
+className = ClassNameGestion(train_path="./dataset/images/train", class_file_path="./dataset/class_names.txt")
+
 # Structures pour collecter les données
 stats_entrainement = []
 repartition_classes = defaultdict(int)
@@ -32,17 +34,13 @@ def obtenir_chemin_images(path):
 
 def encoder_cible(path):
     if chemin_fichier_classes and Path(chemin_fichier_classes).exists():
-        # Charger les classes depuis un fichier si disponible
-        cible = load_class_names(chemin_fichier_classes)
-        print("ici")
+        cible = className.load_class_names()
     else:
-        # Générer dynamiquement les classes à partir des sous-dossiers
         cible = []
         for p in Path(path).glob('*'):
             nom_classe = p.stem[:-1] if p.stem == 'NidoranF' else p.stem
             cible.append(nom_classe)
         
-        # Sauvegarder les classes dans un fichier si un chemin est fourni
         if chemin_fichier_classes:
             with open(chemin_fichier_classes, 'w') as f:
                 for nom in cible:

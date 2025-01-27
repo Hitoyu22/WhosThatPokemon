@@ -4,7 +4,6 @@ efficientnet-pytorch
 pandas
 matplotlib
 tqdm
-Pillow
 Flask
 werkzeug
 fpdf

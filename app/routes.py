@@ -36,10 +36,16 @@ def index():
         if filename.startswith("model-") and filename.endswith(".pt"):
             # Extraire les informations du nom de fichier
             parts = filename.split('-')
-            accuracy = parts[1]
+            accuracy = float(parts[1])
             formatted_name = f"Modèle à {accuracy}%"
             
-            model_files.append((filename, formatted_name))
+            model_files.append((filename, formatted_name, accuracy))
+    
+    # Trier les modèles par ordre décroissant du taux d'accuracy
+    model_files = sorted(model_files, key=lambda x: x[2], reverse=True)
+    
+    # Enlever l'accuracy de la liste finale
+    model_files = [(filename, formatted_name) for filename, formatted_name, _ in model_files]
     
     return render_template('index.html', model_files=model_files)
 

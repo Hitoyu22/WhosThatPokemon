@@ -372,6 +372,11 @@
                     return response.json();
                 })
                 .then((data) => {
+                    if(data.result < 0) {
+                        data.result = 0;
+                    } else if(data.result > 100) {
+                        data.result = 100;
+                    }
                     alert(`Le taux de capture est estimé à ${data.result} %`);
                 })
                 .catch((error) => {

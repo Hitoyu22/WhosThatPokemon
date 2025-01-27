@@ -4,7 +4,9 @@ from PIL import Image
 from efficientnet_pytorch import EfficientNet
 import pandas as pd
 from pathlib import Path
-from scripts.saveClassNames import load_class_names
+from scripts.saveClassNames import ClassNameGestion
+
+className = ClassNameGestion(train_path="./dataset/train", class_file_path="./dataset/class_names.txt")
 
 class_file_path = './dataset/class_names.txt'
 
@@ -12,7 +14,7 @@ class PokemonClassifier:
     def __init__(self, model_path, csv_path):
 
         self.device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        self.class_names = load_class_names(class_file_path)
+        self.class_names = className.load_class_names()
         self.model = EfficientNet.from_pretrained("efficientnet-b2")
         self.model._fc = torch.nn.Linear(1408, len(self.class_names))
         self.model.load_state_dict(torch.load(model_path, map_location=self.device, weights_only=True))
