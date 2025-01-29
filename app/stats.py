@@ -25,6 +25,8 @@ class Pokemon:
         self.sub_evolution_2_id = self.get_pokemon_id_by_name(self.sub_evolution_2) if self.sub_evolution_2 else None
         self.evolution_2 = self.get_evolution(self.evolution) if self.evolution else None
         self.evolution_2_id = self.get_pokemon_id_by_name(self.evolution_2) if self.evolution_2 else None
+        self.evolution_3 = self.get_evolution(self.evolution_2) if self.evolution_2 else None
+        self.evolution_3_id = self.get_pokemon_id_by_name(self.evolution_3) if self.evolution_3 else None
         self.step = self.step_evolution(self.sub_evolution, self.sub_evolution_2, self.legendary)
 
         # Statistiques pour les graphiques
@@ -63,11 +65,17 @@ class Pokemon:
                 return sub_evolution_2
         
     def get_evolution(self, name):
-        row = self.dataset[self.dataset['Nom'] == name]
-        if not row.empty:
-            evolution_2 = row['Evolution'].iloc[0]
-            if evolution_2 is not None:
-                return evolution_2
+        if name == "Aquali":
+            return "Voltali"
+        elif name == "Voltali":
+            return "Pyroli"
+        else:
+            row = self.dataset[self.dataset['Nom'] == name]
+            if not row.empty:
+                evolution_2 = row['Evolution'].iloc[0]
+                if pd.notna(evolution_2):
+                    return evolution_2
+        return None
     
     def legendary_bool(self, val):
         if val == 1.0:
@@ -102,6 +110,8 @@ class Pokemon:
             "Evolution_ID": self.evolution_id if pd.notna(self.evolution_id) else None,
             "Evolution_2": self.evolution_2 if pd.notna(self.evolution_2) else "None",
             "Evolution_2_ID": self.evolution_2_id if pd.notna(self.evolution_2_id) else None,
+            "Evolution_3": self.evolution_3 if pd.notna(self.evolution_3) else "None",
+            "Evolution_3_ID": self.evolution_3_id if pd.notna(self.evolution_3_id) else None,
             "Legendaire": self.legendary,
             "step": self.step,
             "Description": self.description if pd.notna(self.description) else "No description available"
