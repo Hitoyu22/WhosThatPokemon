@@ -114,6 +114,15 @@
                 <p class="text-white text-sm">#{{ pokemonData["Evolution_2_ID"] }} - {{ pokemonData["Evolution_2"] }}</p>
             </div>
             {% endif %}
+
+            {% if pokemonData["Evolution_3"] != "None" %}
+            <div class="flex flex-col items-center">
+                <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/{{ pokemonData['Evolution_3_ID'] }}.png" 
+                    alt="{{ pokemonData['Evolution_3'] }}" 
+                    class="h-24 w-24 object-contain mb-2">
+                <p class="text-white text-sm">#{{ pokemonData["Evolution_3_ID"] }} - {{ pokemonData["Evolution_3"] }}</p>
+            </div>
+            {% endif %}
         </div>
     </div>
     
