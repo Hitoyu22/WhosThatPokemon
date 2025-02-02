@@ -3,7 +3,13 @@ import matplotlib.pyplot as plt
 import json
 
 class Pokemon:
+    """
+    Classe pour stocker les informations d'un Pokémon
+    """
     def __init__(self, data_row, dataset):
+        """
+        Constructeur de la classe Pokemon
+        """
         
         self.dataset = dataset 
         self.number = int(data_row['Number'])
@@ -50,6 +56,9 @@ class Pokemon:
 
     # Fonction pour retrouver l'ID des pokemons en fonction de leur nom en français (utiliser pour retrouver les ids des évolutions)
     def get_pokemon_id_by_name(self, name):
+        """
+        Fonction pour retrouver l'ID des pokemons en fonction de leur nom en français
+        """
         
         if name:
             row = self.dataset[self.dataset['Nom'] == name]
@@ -58,6 +67,9 @@ class Pokemon:
         return None
     
     def get_sub_evolution(self, name):
+        """
+        Fonction pour retrouver la sous-évolution d'un Pokémon
+        """
         row = self.dataset[self.dataset['Nom'] == name]
         if not row.empty:
             sub_evolution_2 = row['Sous_Evolution'].iloc[0]
@@ -65,6 +77,9 @@ class Pokemon:
                 return sub_evolution_2
         
     def get_evolution(self, name):
+        """
+        Fonction pour retrouver l'évolution d'un Pokémon
+        """
         if name == "Aquali":
             return "Voltali"
         elif name == "Voltali":
@@ -78,12 +93,18 @@ class Pokemon:
         return None
     
     def legendary_bool(self, val):
+        """
+        Fonction pour transformer la colonne Legendaire en booléen
+        """
         if val == 1.0:
             return True
         else:
             return False
         
     def step_evolution(self, sub_evolution, sub_evolution_2, legendary):
+        """
+        Fonction pour déterminer le nombre d'étapes d'évolution
+        """
         if sub_evolution is not None:
             step = 2
             if sub_evolution_2 is not None:
@@ -95,6 +116,9 @@ class Pokemon:
         return step
 
     def to_json(self, output_path="pokemon.json"):
+        """
+        Fonction pour sauvegarder les données du Pokémon au format JSON
+        """
         data = {
             "Number": self.number,
             "Name": self.name,
@@ -122,6 +146,9 @@ class Pokemon:
 
     # Graphique radar pour les dégâts reçus par type d'attaque
     def display_radar(self, output_path="radar_stats.png"):
+        """
+        Méthode pour afficher un graphique radar des dégâts reçus par type d'attaque
+        """
         
         radar_values = list(self.radar_stats.values())
         radar_labels = list(self.radar_stats.keys())

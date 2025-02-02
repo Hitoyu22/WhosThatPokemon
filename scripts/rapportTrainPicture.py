@@ -5,9 +5,15 @@ import pandas as pd
 from pathlib import Path
 from datetime import datetime
 
-
+# on crée une classe pour générer le rapport PDF
 class RapportPDF:
+    """
+    Classe pour générer un rapport PDF contenant des graphiques et des statistiques d'apprentissage du modèle.
+    """
     def __init__(self, chemin_repartition, chemin_statistiques, chemin_batch_stats, chemin_rapport):
+        """
+        Initialiser le générateur de rapport PDF avec les chemins des fichiers de données.
+        """
         self.chemin_repartition = chemin_repartition
         self.chemin_statistiques = chemin_statistiques
         self.chemin_batch_stats = chemin_batch_stats
@@ -22,6 +28,9 @@ class RapportPDF:
         os.makedirs(self.graphs_dir, exist_ok=True)
 
     def generer_graphiques(self):
+        """
+        Générer les graphiques de répartition des classes et de l'évolution des performances du modèle.
+        """
         # Charger les données
         repartition_df = pd.read_csv(self.chemin_repartition)
         stats_df = pd.read_csv(self.chemin_statistiques)
@@ -65,6 +74,9 @@ class RapportPDF:
         return repartition_graph_paths, stats_graph_path
 
     def generer_graphiques_epoch(self):
+        """
+        Générer les graphiques de perte et d'accuracy pour chaque époque.
+        """
         # Charger les données de batch stats
         batch_stats_df = pd.read_csv(self.chemin_batch_stats)
 
@@ -90,6 +102,9 @@ class RapportPDF:
         return epoch_graph_paths
 
     def ajouter_page_de_couverture(self):
+        """
+        Ajouter une page de couverture au rapport PDF.
+        """
         self.pdf.add_page()
         self.pdf.set_font("Arial", size=20, style="B")
         self.pdf.cell(0, 10, txt="Rapport d'Apprentissage du Modèle", ln=True, align="C")
@@ -131,6 +146,9 @@ class RapportPDF:
     """)
 
     def ajouter_graphique(self, titre, image_path):
+        """
+        Ajouter un graphique avec un titre au rapport PDF.
+        """
         self.pdf.add_page()
         self.pdf.set_font("Arial", size=16, style="B")
         self.pdf.cell(0, 10, txt=titre, ln=True, align="C")
@@ -138,6 +156,9 @@ class RapportPDF:
         self.pdf.image(image_path, x=10, y=30, w=190)
 
     def ajouter_statistiques(self):
+        """
+        Ajouter les statistiques d'apprentissage au rapport PDF.
+        """
         stats_df = pd.read_csv(self.chemin_statistiques)
 
         self.pdf.add_page()
@@ -167,6 +188,9 @@ class RapportPDF:
         self.pdf.ln(10)
 
     def generer_pdf(self):
+        """
+        Générer le rapport PDF complet avec les graphiques et les statistiques.
+        """
         # Ajouter une page de couverture
         self.ajouter_page_de_couverture()
 

@@ -2,7 +2,13 @@
 import math as math
 
 class catchRate:
+    """
+    Classe permettant de calculer le taux de capture d'un Pokémon
+    """
     def __init__(self, PokemonValue, BallValue, LevelValue, PvValue, StatusValue, PvMax ):
+        """
+        Constructeur de la classe catchRate
+        """
         self.PokemonValue = PokemonValue
         self.BallValue = BallValue
         self.LevelValue = LevelValue
@@ -16,6 +22,9 @@ class catchRate:
         self.PvMaxValue = PvMax + 2*LevelValue
 
     def ValueToImpact(self):
+        """
+        Méthode pour convertir les valeurs en impact
+        """
         #Pokémon Value
         if (self.PokemonValue == 1): #Premier de la lignée
             self.PokemonImpact = 4
@@ -50,6 +59,9 @@ class catchRate:
 
         
     def calculCatchRate(self):
+        """
+        Méthode pour calculer le taux de capture
+        """
         self.ValueToImpact()
         value = math.floor((1 * self.PokemonImpact * self.BallImpact * self.LevelImpact * self.PvImpact * self.StatusImpact) * 100) / 100
         print(value)

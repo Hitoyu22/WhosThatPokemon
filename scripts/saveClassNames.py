@@ -1,21 +1,21 @@
 from pathlib import Path
 
+# On crée une classe pour générer les noms de classe et les enregistrer dans un fichier
+
 class ClassNameGestion:
+    """
+    Classe pour gérer les noms de classe.
+    """
     def __init__(self, train_path=None, class_file_path=None):
         """
-        Initialise l'objet avec les chemins des dossiers ou fichiers.
-
-        :param train_path: Chemin vers le dossier contenant les fichiers d'entraînement (facultatif).
-        :param class_file_path: Chemin vers le fichier contenant les noms des classes (facultatif).
+        Initialise la classe ClassNameGestion.
         """
         self.train_path = train_path
         self.class_file_path = class_file_path
 
     def save_class_names(self, output_path):
         """
-        Générez et enregistrez les noms de classe à partir des fichiers dans le dossier d'entraînement.
-
-        :param output_path: Chemin où les noms des classes doivent être sauvegardés.
+        Enregistre les noms de classe dans un fichier texte.
         """
         if not self.train_path:
             raise ValueError("Chemin d'entraînement non spécifié.")
@@ -33,9 +33,7 @@ class ClassNameGestion:
 
     def load_class_names(self):
         """
-        Chargez les noms de classe à partir du fichier.
-
-        :return: Liste des noms de classes.
+        Charge les noms de classe à partir d'un fichier texte.
         """
         if not self.class_file_path:
             raise ValueError("Chemin du fichier de classes non spécifié.")

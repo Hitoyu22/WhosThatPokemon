@@ -1,10 +1,14 @@
 from saveClassNames import save_class_names
 
+
+# On crée une classe ClassNameSaver pour sauvegarder les noms des classes
+# L'ordre des classes varie d'un ordinateur à l'autre, il est donc important de les sauvegarder pour que les modèles soient toujours compatibles
 class ClassNameSaver:
     def __init__(self, dataset_directory, output_file):
         self.dataset_directory = dataset_directory
         self.output_file = output_file
 
+    # On crée une méthode save pour sauvegarder les noms des classes
     def save(self):
         save_class_names(self.dataset_directory, self.output_file)
 
