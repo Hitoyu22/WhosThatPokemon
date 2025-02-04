@@ -6,7 +6,7 @@ Site Flask de prédiction du Pokémon sur une image donnée à un modèle.
 - Quentin DELNEUF
 - Damien VAURETTE
 
-## Présentation 
+## Présentation 
 
 **Who's that Pokemon** est un projet python permettant d'utiliser un modèle de prédiction d'images que vous pouvez entrainer. Une interface Web permet de déposer une image et d'obtenir une prédiction. Cette prédiction mène par la suite à l'affichage d'information sur le pokémon déterminer (tel un pokédex).
 
@@ -75,7 +75,7 @@ python3 scripts/trainPictureModele.py
 python3 scripts/clean.py
 ```
 
-## Librairies utilisées 
+## Librairies utilisées 
 Les librairies utilisées dans ce projet sont : 
 
 - **torch** : Framework pour l’apprentissage automatique et la construction de modèles de réseaux de neurones.
@@ -88,7 +88,7 @@ Les librairies utilisées dans ce projet sont :
 - **werkzeug** : Outils pour gérer les requêtes HTTP dans des applications web, utilisé avec Flask.
 - **fpdf** : Bibliothèque pour générer des fichiers PDF.
 
-## Objectifs du projet 
+## Objectifs du projet 
 
 Les objectifs du projet sont divers et variés : 
 - **Produire un projet qui nous intéressait** : Nous avons été très heureux de travailler sur ce projet qui nous intéressait tous. Créer un site permettant de déterminer le pokémon sur une image que vous avez importé est un challenge qui nous a tout de suite plu.
@@ -96,7 +96,7 @@ Les objectifs du projet sont divers et variés :
 - **Apprendre de nouvelles technologies de datamining (pyTorch)** : Pour créer notre modèle nous étions dans l'obligation d'utiliser une librairie dédiée aux images comme pytorch.Cela nous a permis d'apprendre une nouvelle technologie intéressante dans le cas de ce projet.
 - **Développer un projet complet dans une interface web** : Afin de proposer une expérience innovante pour les utilisateurs de notre modèle, nous avons utiliser Flask afin de proposer une interfaçe web pour pouvoir importer l'image et regarder les informations du pokemon.
 
-## Difficultés rencontrées
+## Difficultés rencontrées
 
 Durant ce projet, nous avons rencontrés plusieurs difficultés : 
 
